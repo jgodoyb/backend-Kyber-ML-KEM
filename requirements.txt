@@ -1,0 +1,15 @@
+# ==============================================================================
+# Requisitos del Proyecto: backend-Kyber-ML-KEM (FIPS 203)
+# ==============================================================================
+# El núcleo criptográfico es 100% puro en Python 3.10+ y posee CERO dependencias 
+# externas de terceros para la ejecución en producción.
+# 
+# Las siguientes librerías son utilizadas únicamente para desarrollo, control de 
+# calidad, tipado estático y ejecución del set de pruebas unitarias.
+
+# --- Testing & Cobertura ---
+pytest>=8.0.0
+pytest-cov>=5.0.0
+
+# --- Análisis Estático & Tipado ---
+mypy>=1.10.0
