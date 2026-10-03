@@ -33,10 +33,26 @@ class HybridPQC:
             "ciphertext": ciphertext_and_tag,
         }
 
+    def encapsulate(self, ek: bytes) -> tuple[bytes, bytes]:
+        """Encapsula una llave secreta compartida K con la clave pública ek.
+
+        Devuelve: (shared_key de 32 bytes, capsule)
+        """
+        from mlkem.mlkem import ml_kem_encaps
+        return ml_kem_encaps(self.params, ek)
+
+    def decapsulate(self, dk: bytes, capsule: bytes) -> bytes:
+        """Desencapsula la cápsula con la clave privada dk para obtener la llave compartida K.
+
+        Devuelve: shared_key de 32 bytes
+        """
+        from mlkem.mlkem import ml_kem_decaps
+        return ml_kem_decaps(self.params, dk, capsule)
+
     def decrypt_payload(self, dk: bytes, capsule: bytes, nonce: bytes, ciphertext: bytes) -> bytes:
         """Flujo receptor: Decapsula con ML-KEM y descifra con AES-256-GCM."""
         # 1. Decapsulación formal FIPS 203 (con rechazo implícito)
         shared_key = ml_kem_decaps_internal(self.params, dk, capsule)
 
         # 2. Descifrado autenticado con AES-256-GCM
-        return decrypt_aes_gcm(shared_key, nonce, ciphertext)
+        return decrypt_aes_gcm(shared_key, nonce, ciphertext)
